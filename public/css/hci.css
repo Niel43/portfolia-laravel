@@ -1,0 +1,21 @@
+/* Human-computer interaction: clear public links, feedback and accessible controls. */
+.public-link{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding:12px;border:1px solid var(--glass-line);border-radius:14px;background:var(--glass)}
+.public-link input{flex:1 1 240px;min-width:0}
+.help-text{font-size:.9rem;color:var(--text-muted);margin:6px 0 0}
+.btn:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.acts{align-items:center;flex-wrap:wrap}
+.public-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:16px}
+.status-note{padding:12px 16px;border:1px solid var(--glass-line);border-radius:12px;margin:14px auto;max-width:900px}
+@media(max-width:600px){.public-link{align-items:stretch}.public-link .btn{width:100%;text-align:center}.acts{width:100%}.acts>*{flex:1}.acts .btn{width:100%;text-align:center}}
+@media print{
+  html,body{background:#fff!important;background-image:none!important;color:#111!important;min-height:0}
+  body{font-size:11pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .nav,.bar,.public-actions,#toast,#bg,.no-print{display:none!important}
+  main{margin:0!important;padding:0!important}
+  .t-simple,.t-modern,.t-creative{margin:0!important;max-width:none!important;box-shadow:none!important;border:0!important}
+  .t-creative{min-height:0}
+  .t-creative aside{position:static!important;height:auto!important;overflow:visible!important}
+  .t-modern .card,.t-simple section,.t-creative section{break-inside:avoid}
+  a{color:inherit!important;text-decoration:none}
+  @page{margin:14mm}
+}
