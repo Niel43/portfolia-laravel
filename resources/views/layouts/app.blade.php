@@ -106,5 +106,6 @@
     })();
   </script>
   <script src="{{ asset('js/background.js') }}"></script>
+  <script src="{{ asset('js/hci.js') }}"></script>
 </body>
 </html>
