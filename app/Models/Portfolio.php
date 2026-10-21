@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Portfolio extends Model
 {
     protected $fillable = [
-        'user_id', 'full_name', 'email', 'phone', 'address', 'about', 'photo_url',
+        'user_id', 'public_id', 'full_name', 'email', 'phone', 'address', 'about', 'photo_url',
         'skills', 'education', 'projects', 'experience', 'links', 'template',
     ];
 
