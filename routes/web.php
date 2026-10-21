@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 
+// Public portfolios can be viewed without signing in.
+Route::get('/p/{publicId}', [PortfolioController::class, 'publicView'])->name('portfolios.public');
+
 // Sign up / log in / log out
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
