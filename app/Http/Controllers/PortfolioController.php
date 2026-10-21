@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Portfolio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PortfolioController extends Controller
 {
@@ -31,8 +32,13 @@ class PortfolioController extends Controller
 
     public function store(Request $request)
     {
-        $portfolio = Portfolio::create($this->data($request) + ['user_id' => Auth::id()]);
-        return redirect()->route('portfolios.templates', $portfolio)->with('status', 'Portfolio saved to the database.');
+        $portfolio = Portfolio::create($this->data($request) + [
+            'user_id' => Auth::id(),
+            'public_id' => Str::random(32),
+        ]);
+
+        return redirect()->route('portfolios.templates', $portfolio)
+            ->with('status', 'Portfolio saved successfully! Choose a template to finish it.');
     }
 
     public function edit(Portfolio $portfolio)
@@ -43,7 +49,7 @@ class PortfolioController extends Controller
     public function update(Request $request, Portfolio $portfolio)
     {
         $this->own($portfolio)->update($this->data($request));
-        return redirect()->route('portfolios.templates', $portfolio)->with('status', 'Portfolio updated.');
+        return redirect()->route('portfolios.templates', $portfolio)->with('status', 'Portfolio updated successfully.');
     }
 
     public function destroy(Portfolio $portfolio)
@@ -61,14 +67,24 @@ class PortfolioController extends Controller
     {
         $validated = $request->validate(['template' => 'required|in:' . implode(',', self::TEMPLATES)]);
         $this->own($portfolio)->update($validated);
-        return redirect()->route('portfolios.preview', $portfolio);
+        return redirect()->route('portfolios.preview', $portfolio)
+            ->with('status', 'Your portfolio is ready to view and share.');
     }
 
+    /** Private preview for the owner. */
     public function preview(Portfolio $portfolio)
     {
         $this->own($portfolio);
-        $tpl = in_array($portfolio->template, self::TEMPLATES) ? $portfolio->template : 'simple';
+        $tpl = in_array($portfolio->template, self::TEMPLATES, true) ? $portfolio->template : 'simple';
         return view('portfolios.preview', compact('portfolio', 'tpl'));
+    }
+
+    /** Public read-only page identified by a random, unguessable ID. */
+    public function publicView(string $publicId)
+    {
+        $portfolio = Portfolio::where('public_id', $publicId)->firstOrFail();
+        $tpl = in_array($portfolio->template, self::TEMPLATES, true) ? $portfolio->template : 'simple';
+        return view('portfolios.public', compact('portfolio', 'tpl'));
     }
 
     /** Validates the form and shapes it for the database. */
